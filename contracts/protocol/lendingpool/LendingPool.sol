@@ -51,7 +51,7 @@ contract LendingPool is VersionedInitializable, ILendingPool, LendingPoolStorage
 
   //main configuration parameters
   uint256 public constant MAX_STABLE_RATE_BORROW_SIZE_PERCENT = 2500;
-  uint256 public constant FLASHLOAN_PREMIUM_TOTAL = 9;
+  // uint256 public constant FLASHLOAN_PREMIUM_TOTAL = 9;
   uint256 public constant MAX_NUMBER_RESERVES = 128;
   uint256 public constant LENDINGPOOL_REVISION = 0x2;
 
@@ -499,7 +499,7 @@ contract LendingPool is VersionedInitializable, ILendingPool, LendingPoolStorage
     for (vars.i = 0; vars.i < assets.length; vars.i++) {
       aTokenAddresses[vars.i] = _reserves[assets[vars.i]].aTokenAddress;
 
-      premiums[vars.i] = amounts[vars.i].mul(FLASHLOAN_PREMIUM_TOTAL).div(10000);
+      premiums[vars.i] = amounts[vars.i]/*.mul(FLASHLOAN_PREMIUM_TOTAL)*/.div(10000);
 
       IAToken(aTokenAddresses[vars.i]).transferUnderlyingTo(receiverAddress, amounts[vars.i]);
     }
