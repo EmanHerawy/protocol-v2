@@ -478,88 +478,88 @@ contract LendingPool is VersionedInitializable, ILendingPool, LendingPoolStorage
    * @param referralCode Code used to register the integrator originating the operation, for potential rewards.
    *   0 if the action is executed directly by the user, without any middle-man
    **/
-  function flashLoan(
-    address receiverAddress,
-    address[] calldata assets,
-    uint256[] calldata amounts,
-    uint256[] calldata modes,
-    address onBehalfOf,
-    bytes calldata params,
-    uint16 referralCode
-  ) external override whenNotPaused {
-    FlashLoanLocalVars memory vars;
+  // function flashLoan(
+  //   address receiverAddress,
+  //   address[] calldata assets,
+  //   uint256[] calldata amounts,
+  //   uint256[] calldata modes,
+  //   address onBehalfOf,
+  //   bytes calldata params,
+  //   uint16 referralCode
+  // ) external override whenNotPaused {
+  //   FlashLoanLocalVars memory vars;
 
-    ValidationLogic.validateFlashloan(assets, amounts);
+  //   ValidationLogic.validateFlashloan(assets, amounts);
 
-    address[] memory aTokenAddresses = new address[](assets.length);
-    uint256[] memory premiums = new uint256[](assets.length);
+  //   address[] memory aTokenAddresses = new address[](assets.length);
+  //   uint256[] memory premiums = new uint256[](assets.length);
 
-    vars.receiver = IFlashLoanReceiver(receiverAddress);
+  //   vars.receiver = IFlashLoanReceiver(receiverAddress);
 
-    for (vars.i = 0; vars.i < assets.length; vars.i++) {
-      aTokenAddresses[vars.i] = _reserves[assets[vars.i]].aTokenAddress;
+  //   for (vars.i = 0; vars.i < assets.length; vars.i++) {
+  //     aTokenAddresses[vars.i] = _reserves[assets[vars.i]].aTokenAddress;
 
-      premiums[vars.i] = amounts[vars.i]/*.mul(FLASHLOAN_PREMIUM_TOTAL)*/.div(10000);
+  //     premiums[vars.i] = amounts[vars.i]/*.mul(FLASHLOAN_PREMIUM_TOTAL)*/.div(10000);
 
-      IAToken(aTokenAddresses[vars.i]).transferUnderlyingTo(receiverAddress, amounts[vars.i]);
-    }
+  //     IAToken(aTokenAddresses[vars.i]).transferUnderlyingTo(receiverAddress, amounts[vars.i]);
+  //   }
 
-    require(
-      vars.receiver.executeOperation(assets, amounts, premiums, msg.sender, params),
-      Errors.LP_INVALID_FLASH_LOAN_EXECUTOR_RETURN
-    );
+  //   require(
+  //     vars.receiver.executeOperation(assets, amounts, premiums, msg.sender, params),
+  //     Errors.LP_INVALID_FLASH_LOAN_EXECUTOR_RETURN
+  //   );
 
-    for (vars.i = 0; vars.i < assets.length; vars.i++) {
-      vars.currentAsset = assets[vars.i];
-      vars.currentAmount = amounts[vars.i];
-      vars.currentPremium = premiums[vars.i];
-      vars.currentATokenAddress = aTokenAddresses[vars.i];
-      vars.currentAmountPlusPremium = vars.currentAmount.add(vars.currentPremium);
+  //   for (vars.i = 0; vars.i < assets.length; vars.i++) {
+  //     vars.currentAsset = assets[vars.i];
+  //     vars.currentAmount = amounts[vars.i];
+  //     vars.currentPremium = premiums[vars.i];
+  //     vars.currentATokenAddress = aTokenAddresses[vars.i];
+  //     vars.currentAmountPlusPremium = vars.currentAmount.add(vars.currentPremium);
 
-      if (DataTypes.InterestRateMode(modes[vars.i]) == DataTypes.InterestRateMode.NONE) {
-        _reserves[vars.currentAsset].updateState();
-        _reserves[vars.currentAsset].cumulateToLiquidityIndex(
-          IERC20(vars.currentATokenAddress).totalSupply(),
-          vars.currentPremium
-        );
-        _reserves[vars.currentAsset].updateInterestRates(
-          vars.currentAsset,
-          vars.currentATokenAddress,
-          vars.currentAmountPlusPremium,
-          0
-        );
+  //     if (DataTypes.InterestRateMode(modes[vars.i]) == DataTypes.InterestRateMode.NONE) {
+  //       _reserves[vars.currentAsset].updateState();
+  //       _reserves[vars.currentAsset].cumulateToLiquidityIndex(
+  //         IERC20(vars.currentATokenAddress).totalSupply(),
+  //         vars.currentPremium
+  //       );
+  //       _reserves[vars.currentAsset].updateInterestRates(
+  //         vars.currentAsset,
+  //         vars.currentATokenAddress,
+  //         vars.currentAmountPlusPremium,
+  //         0
+  //       );
 
-        IERC20(vars.currentAsset).safeTransferFrom(
-          receiverAddress,
-          vars.currentATokenAddress,
-          vars.currentAmountPlusPremium
-        );
-      } else {
-        // If the user chose to not return the funds, the system checks if there is enough collateral and
-        // eventually opens a debt position
-        _executeBorrow(
-          ExecuteBorrowParams(
-            vars.currentAsset,
-            msg.sender,
-            onBehalfOf,
-            vars.currentAmount,
-            modes[vars.i],
-            vars.currentATokenAddress,
-            referralCode,
-            false
-          )
-        );
-      }
-      emit FlashLoan(
-        receiverAddress,
-        msg.sender,
-        vars.currentAsset,
-        vars.currentAmount,
-        vars.currentPremium,
-        referralCode
-      );
-    }
-  }
+  //       IERC20(vars.currentAsset).safeTransferFrom(
+  //         receiverAddress,
+  //         vars.currentATokenAddress,
+  //         vars.currentAmountPlusPremium
+  //       );
+  //     } else {
+  //       // If the user chose to not return the funds, the system checks if there is enough collateral and
+  //       // eventually opens a debt position
+  //       _executeBorrow(
+  //         ExecuteBorrowParams(
+  //           vars.currentAsset,
+  //           msg.sender,
+  //           onBehalfOf,
+  //           vars.currentAmount,
+  //           modes[vars.i],
+  //           vars.currentATokenAddress,
+  //           referralCode,
+  //           false
+  //         )
+  //       );
+  //     }
+  //     emit FlashLoan(
+  //       receiverAddress,
+  //       msg.sender,
+  //       vars.currentAsset,
+  //       vars.currentAmount,
+  //       vars.currentPremium,
+  //       referralCode
+  //     );
+  //   }
+  // }
 
   /**
    * @dev Returns the state and configuration of the reserve

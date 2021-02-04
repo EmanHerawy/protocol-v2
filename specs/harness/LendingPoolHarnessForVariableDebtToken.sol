@@ -174,17 +174,17 @@ contract LendingPoolHarnessForVariableDebtToken is ILendingPool {
     return originalPool.paused();
   }
 
-  function flashLoan(
-    address receiver,
-    address[] calldata assets,
-    uint256[] calldata amounts,
-    uint256[] calldata modes,
-    address onBehalfOf,
-    bytes calldata params,
-    uint16 referralCode
-  ) external override {
-    originalPool.flashLoan(receiver, assets, amounts, modes, onBehalfOf, params, referralCode);
-  }
+  // function flashLoan(
+  //   address receiver,
+  //   address[] calldata assets,
+  //   uint256[] calldata amounts,
+  //   uint256[] calldata modes,
+  //   address onBehalfOf,
+  //   bytes calldata params,
+  //   uint16 referralCode
+  // ) external override {
+  //   originalPool.flashLoan(receiver, assets, amounts, modes, onBehalfOf, params, referralCode);
+  // }
 
   function finalizeTransfer(
     address asset,
