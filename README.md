@@ -6,8 +6,8 @@ the current implementation of the protocol violates the Islamic roles and Muslim
 implementing The Islamic Endowment and the Islamic loan Hassan has a great social and economic impact which the entire world do need after  these  hard days where the world facing COVID and its economic consequences.
 ## Changes made :
 - remove loan interests ( to prohibit Reba)
-- remove Flashloans ( You can't buy what you don't already own in Islam)
-
+- remove Flashloans ( You can't buy what you don't already own in Islam "Goods not to be sold before obtaining their possession")
+check [https://www.iium.edu.my/deed/hadith/muslim/010_smt.html]
 
 ```
         .///.                .///.     //.            .//  `/////////////-
