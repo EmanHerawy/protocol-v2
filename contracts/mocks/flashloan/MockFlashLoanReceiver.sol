@@ -70,7 +70,7 @@ contract MockFlashLoanReceiver is FlashLoanReceiverBase {
 
       uint256 amountToReturn = (_amountToApprove != 0)
         ? _amountToApprove
-        : amounts[i].add(premiums[i]);
+        : amounts[i];//.add(premiums[i]);
       //execution does not fail - mint tokens and return them to the _destination
 
       token.mint(premiums[i]);

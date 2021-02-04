@@ -66,7 +66,7 @@ contract UniswapRepayAdapter is BaseUniswapAdapter {
       decodedParams.collateralAmount,
       decodedParams.rateMode,
       initiator,
-      premiums[0],
+      // premiums[0],
       decodedParams.permitSignature,
       decodedParams.useEthPath
     );
@@ -156,7 +156,7 @@ contract UniswapRepayAdapter is BaseUniswapAdapter {
    * @param collateralAmount Amount of the reserve to be swapped
    * @param rateMode Rate mode of the debt to be repaid
    * @param initiator Address of the user
-   * @param premium Fee of the flash loan
+   * param premium Fee of the flash loan
    * @param permitSignature struct containing the permit signature
    */
   function _swapAndRepay(
@@ -166,7 +166,7 @@ contract UniswapRepayAdapter is BaseUniswapAdapter {
     uint256 collateralAmount,
     uint256 rateMode,
     address initiator,
-    uint256 premium,
+    // uint256 premium,
     PermitSignature memory permitSignature,
     bool useEthPath
   ) internal {
@@ -185,7 +185,7 @@ contract UniswapRepayAdapter is BaseUniswapAdapter {
         maxCollateralToSwap = maxCollateralToSwap.mul(repaidAmount).div(amount);
       }
 
-      uint256 neededForFlashLoanDebt = repaidAmount.add(premium);
+      uint256 neededForFlashLoanDebt = repaidAmount;//.add(premium);
       uint256[] memory amounts =
         _getAmountsIn(collateralAsset, debtAsset, neededForFlashLoanDebt, useEthPath);
       require(amounts[0] <= maxCollateralToSwap, 'slippage too high');
@@ -207,14 +207,14 @@ contract UniswapRepayAdapter is BaseUniswapAdapter {
         collateralAsset,
         collateralReserveData.aTokenAddress,
         initiator,
-        repaidAmount.add(premium),
+        repaidAmount,//.add(premium),
         permitSignature
       );
     }
 
     // Repay flashloan. Approves for 0 first to comply with tokens that implement the anti frontrunning approval fix.
     IERC20(debtAsset).safeApprove(address(LENDING_POOL), 0);
-    IERC20(debtAsset).safeApprove(address(LENDING_POOL), amount.add(premium));
+    IERC20(debtAsset).safeApprove(address(LENDING_POOL), amount/*.add(premium)*/);
   }
 
   /**

@@ -83,7 +83,7 @@ contract UniswapLiquiditySwapAdapter is BaseUniswapAdapter {
         assets[i],
         decodedParams.assetToSwapToList[i],
         amounts[i],
-        premiums[i],
+        // premiums[i],
         initiator,
         decodedParams.minAmountsToReceive[i],
         decodedParams.swapAllBalance[i],
@@ -201,7 +201,7 @@ contract UniswapLiquiditySwapAdapter is BaseUniswapAdapter {
     address assetFrom,
     address assetTo,
     uint256 amount,
-    uint256 premium,
+    // uint256 premium,
     address initiator,
     uint256 minAmountToReceive,
     bool swapAllBalance,
@@ -215,8 +215,8 @@ contract UniswapLiquiditySwapAdapter is BaseUniswapAdapter {
 
     vars.aTokenInitiatorBalance = IERC20(vars.aToken).balanceOf(initiator);
     vars.amountToSwap =
-      swapAllBalance && vars.aTokenInitiatorBalance.sub(premium) <= amount
-        ? vars.aTokenInitiatorBalance.sub(premium)
+      swapAllBalance && vars.aTokenInitiatorBalance/*.sub(premium)*/ <= amount
+        ? vars.aTokenInitiatorBalance//.sub(premium)
         : amount;
 
     vars.receivedAmount =
@@ -227,8 +227,8 @@ contract UniswapLiquiditySwapAdapter is BaseUniswapAdapter {
     IERC20(assetTo).safeApprove(address(LENDING_POOL), vars.receivedAmount);
     LENDING_POOL.deposit(assetTo, vars.receivedAmount, initiator, 0);
 
-    vars.flashLoanDebt = amount.add(premium);
-    vars.amountToPull = vars.amountToSwap.add(premium);
+    vars.flashLoanDebt = amount;//.add(premium);
+    vars.amountToPull = vars.amountToSwap;//.add(premium);
 
     _pullAToken(assetFrom, vars.aToken, initiator, vars.amountToPull, permitSignature);
 
