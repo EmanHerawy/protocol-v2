@@ -4,7 +4,9 @@ This is an attempt to implement a Shariah-compliant version of the Aave protocol
 ## The main issue :
 the current implementation of the protocol violates the Islamic roles and Muslims can't use or build on top of it with the current implementation.
 implementing The Islamic Endowment and the Islamic loan Hassan has a great social and economic impact which the entire world do need after  these  hard days where the world facing COVID and its economic consequences.
-
+## Changes made :
+- remove loan interests ( to prohibit Reba)
+- remove Flashloans ( You can't buy what you don't already own in Islam)
 
 
 ```
